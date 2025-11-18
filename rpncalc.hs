@@ -2,6 +2,7 @@ import Text.Read
 import System.IO
 import System.IO.Error
 import Control.Exception
+import GHC.Float (powerFloat)
 
 type Stack = [Float]
 
@@ -33,13 +34,16 @@ performOperation (t:tokensRest) stack = do
                 "+" -> binaryOp (+) stack
                 "-" -> binaryOp (flip (-)) stack
                 "*" -> binaryOp (*) stack
+                "**" -> binaryOp powerFloat stack
                 "/" -> binaryOp (flip (/)) stack
                 "%" -> binaryOp (\a b -> fromIntegral $ round b  `mod` round a) stack
                 "&" -> flipFlop stack
-                "_" -> unaryOp (\a -> fromIntegral $ floor a) stack
+                "_" -> unaryOp (fromIntegral . floor) stack
                 "^" -> unaryOp (\a -> fromIntegral $ floor $ a + 1) stack
                 "!" -> return $ drop 1 stack
                 "!!!" -> return []
+                "dup" -> return $ head stack : stack
+                "$" -> return [sum stack]
                 _ -> ioError $ userError $ "Unknown operator `" ++ t ++ "`"
     performOperation tokensRest stack'
 
