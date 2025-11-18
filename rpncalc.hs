@@ -31,14 +31,15 @@ performOperation (t:tokensRest) stack = do
             Just n -> return (n:stack)
             Nothing -> case t of
                 "+" -> binaryOp (+) stack
-                "-" -> binaryOp (-) stack
+                "-" -> binaryOp (flip (-)) stack
                 "*" -> binaryOp (*) stack
-                "/" -> binaryOp (/) stack
-                "%" -> binaryOp (\a b -> fromIntegral $ round a  `mod` round b) stack
+                "/" -> binaryOp (flip (/)) stack
+                "%" -> binaryOp (\a b -> fromIntegral $ round b  `mod` round a) stack
                 "&" -> flipFlop stack
                 "_" -> unaryOp (\a -> fromIntegral $ floor a) stack
                 "^" -> unaryOp (\a -> fromIntegral $ floor $ a + 1) stack
                 "!" -> return $ drop 1 stack
+                "!!!" -> return []
                 _ -> ioError $ userError $ "Unknown operator `" ++ t ++ "`"
     performOperation tokensRest stack'
 
