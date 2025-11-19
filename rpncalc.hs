@@ -37,6 +37,8 @@ performOperation (t : tokensRest) stack = do
             "^" -> unaryOp (\a -> fromIntegral $ floor $ a + 1) stack
             "!" -> return $ drop 1 stack
             "!!!" -> return []
+            "sqrt" -> unaryOp sqrt stack
+            "abs" -> unaryOp abs stack
             "dup" -> return $ head stack : stack
             "$" -> return [sum stack]
             _ -> ioError $ userError $ "Unknown operator `" ++ t ++ "`"
