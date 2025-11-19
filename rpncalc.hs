@@ -11,11 +11,6 @@ main = catch (rpn []) handler
     handler :: IOError -> IO ()
     handler e = putStrLn $ "Runtime error: " ++ show e
 
-onError :: IOError -> IO ()
-onError e
-    | isUserError e = putStrLn $ "Runtime error: " ++ show e
-    | otherwise = ioError e
-
 rpn :: Stack -> IO ()
 rpn stack = do
     line <- getLine
