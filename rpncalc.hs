@@ -56,7 +56,7 @@ unaryOp :: (Float -> Float) -> Stack -> IO Stack
 unaryOp op stack =
     let (operand, stack') = takeOperandsFromStack 1 stack
      in case operand of
-            Nothing -> ioError $ userError "not enough arguments for binary operation"
+            Nothing -> ioError $ userError "not enough arguments for unary operation"
             Just [a] -> return $ op a : stack'
 
 binaryOp :: (Float -> Float -> Float) -> Stack -> IO Stack
